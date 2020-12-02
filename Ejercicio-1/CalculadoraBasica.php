@@ -22,6 +22,10 @@ class CalculadoraBasica
         return $this->memory;
     }
 
+    public function cleanDisplay(){
+        $this->display="0";
+    }
+
     public function digit($digit)
     {
         if ($this->display === 0) {
@@ -81,7 +85,9 @@ class CalculadoraBasica
 
     }
 
-    public function cleanDisplay(){
-        $this->display="0";
-    }
+    
 }
+?>
+<!DOCTYPE html>
+<html lang="es">
+</html>
