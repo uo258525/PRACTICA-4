@@ -102,7 +102,7 @@ class CalculadoraCientifica extends CalculadoraBasica
 
     public function functions($op)
     {
-        switch ($op) {
+        switch ($this->$op) {
 
 
             case ("log"):
@@ -222,9 +222,6 @@ if (count($_POST) > 0) {
             <p>
                 <?php echo ("<input type='text' class'pantalla' id='pantalla' value='" . $calc->getPantalla() . "' disabled />"); ?>
             </p>
-            <input type="submit" class="darkGrey" id="mrc" name="mrc" value="mrc" />
-            <input type="submit" class="darkGrey" id="mMenos" name="m-" value="m-" />
-            <input type="submit" class="darkGrey" id="mMas" name="m+" value="m+" />
             <input type="submit" class="darkGrey" id="mrc" name="mrc" value="mrc" />
             <input type="submit" class="darkGrey" id="mMenos" name="m-" value="m-" />
             <input type="submit" class="darkGrey" id="mMas" name="m+" value="m+" />
