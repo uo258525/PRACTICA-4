@@ -44,48 +44,58 @@ class Stack
 class CalculadoraRPN
 {
     protected $display;
-    protected $memory;
     protected $stackRPN;
+    private $borrar;
 
     public function __construct()
     {
         $this->display = "";
-        $this->memory = "";
         $this->stackRPN = new Stack();
     }
-    public function getDisplay()
+    public function getPantalla()
     {
         return $this->display;
+    }
+    public function cleanPantalla()
+    {
+        $this->display = "";
     }
 
     public function button($button)
     {
-        if ($this->pantalla === 0) {
-            $this->pantalla = $button;
+        if ($this->borrar) {
+            $this->borrar = false;
+            $this->cleanPantalla();
+        }
+        if ($this->display === 0) {
+            $this->display = $button;
         } else {
-            $this->pantalla .= $button;
+            $this->display .= $button;
         }
     }
     public function operadorSimple($op)
     {
 
 
-        $left = floatval($this->stackRPN . pop());
-        $right = floatval($this->stackRPN . pop());
-        $result = eval($right + $op + $left);
-        $this->stackRPN . push($result);
+        $left = floatval($this->stackRPN->pop());
+        $right = floatval($this->stackRPN->pop());
+        $expr = 'return ' . $left . $op . $right . ';';
+        $result = eval($expr);
+        $this->stackRPN->push($result);
+        $this->display = $result;
+        $this->borrar = true;
     }
 
     public function enter()
     {
-        $this->stackRPN . push($_SESSION["expresion3"]);
-        $this->pantalla = "";
+        $this->stackRPN->push($this->getPantalla());
+        $this->display = "";
     }
     public function math($op)
     {
-        $aux = floatval($this->stackRPN . pop());
+        $aux = floatval($this->stackRPN->pop());
         $result = 0;
-        switch ($this->$op) {
+        switch ($op) {
 
 
             case ("log"):
@@ -115,8 +125,9 @@ class CalculadoraRPN
                 $result = tan($aux);
                 break;
         }
-        $this->stackRPN . push($aux);
-        $_SESSION["expresion3"] = $aux;
+        $this->stackRPN->push($result);
+        $_SESSION["expresion3"] = $result;
+        $this->borrar = true;
     }
 
     public function borrar()
@@ -124,11 +135,13 @@ class CalculadoraRPN
         session_destroy();
     }
 }
-if (!isset($_SESSION["calculadora"])) {
-    $_SESSION["calculadora"] = new CalculadoraRPN();
-    $_SESSION["expresion"] = "";
+if (!isset($_SESSION["calculadoraRPN"])) {
+    $_SESSION["calculadoraRPN"] = new CalculadoraRPN();
+    $_SESSION["expresion3"] = "";
 }
-$calc = $_SESSION["calculadora"];
+$calc = $_SESSION["calculadoraRPN"];
+
+
 
 if (count($_POST) > 0) {
     if (isset($_POST["0"])) $calc->button("0");
@@ -158,9 +171,6 @@ if (count($_POST) > 0) {
     if (isset($_POST["sqrt"])) $calc->math("sqrt");
     if (isset($_POST["C"])) $calc->borrar();
     if (isset($_POST["Enter"])) $calc->enter();
-
-
-    $_SESSION["expresion"] = $calc->getPantalla();
 }
 ?>
 <!DOCTYPE html>
@@ -168,46 +178,58 @@ if (count($_POST) > 0) {
 
 <head>
     <meta charset="UTF-8">
-    <title>CalculadoraCientifica</title>
+    <title>CalculadoraRPN</title>
     <meta content="Elena Díaz Gutiérrez -UO258525" name="author">
     <meta content="width=device-width,user-scalable=yes" name="viewport">
-    <link href="CalculadoraCientifica.css" rel="stylesheet">
+    <link href="CalculadoraRPN.css" rel="stylesheet">
 </head>
 
 <body>
     <h1>Calculadora RPN</h1>
     <main class="calculator" id="calculator">
-        <form method='post' action='#'>
-            
+        <form method='post'>
+
             <p>
-                <?php echo ("<input type='text' class'pantalla' id='pantalla' value='" . $calc->getDisplay() . "' disabled />"); ?>
+                <input type='text' class='pantalla' id='pantalla' value="<?php echo $calc->getPantalla() ?>" disabled />
             </p>
-           
-            <input type="submit" class="op" id="x2"  name="x2" value="x^2"/>
-            <input type="submit" class="op"  id="sin" name="sin" value="sin"/>
-            <input type="submit" class="op"  id="cos" name="cos" value="cos"/>
-            <input type="submit" class="op" id="tan" name="tan" value="tan"/>
-            <input type="submit" class="op" id="10x" name="10x" value="10^x"/>
-            <input type="submit" lass="op" id="sqrt" name="sqrt" value="sqrt" />
-            <input type="submit" lass="op" id="log" name="log" value="log">
-            <input type="submit" class="op" id="exp" name="exp" value="exp">
-            <input type="submit" class="red" id="div" name="/" value="/" />
-            <input type="submit" class="numb" id="7" name="7" value="7" />
-            <input type="submit" class="numb" id="8" name="8" value="8">
-            <input type="submit" class="numb" id="9" name="9" value="9" />
-            <input type="submit" class="red" id="mul" name="*" value="*" />
-            <input type="submit" class="numb" id="4" name="4" value="4" />
-            <input type="submit" class="numb" id="5" name="5" value="5" />
-            <input type="submit" class="numb" id="6" name="6" value="6" />
-            <input type="submit" class="red" id="minus" name="-" value="-" />
-            <input type="submit" class="numb" id="1" name="1" value="1" />
-            <input type="submit" class="numb" id="2" name="2" value="2" />
-            <input type="submit" class="numb" id="3" name="3" value="3" />
-            <input type="submit" class="red" id="add" name="+" value="+" />
-            <input type="submit" class="numb" id="0" name="0" value="0" />
-            <input type="submit" class="punto" id="punto" name="punto" value="." />
-            <input type="submit" class="C" id="C" name="C" value="C" />
-            <input type="submit" class="enter" id="Enter" name="Enter" value="Enter" />
+
+            <div>
+                <input type="submit" class="op" id="x2" name="x2" value="x^2" />
+                <input type="submit" class="op" id="sin" name="sin" value="sin" />
+                <input type="submit" class="op" id="cos" name="cos" value="cos" />
+                <input type="submit" class="op" id="tan" name="tan" value="tan" />
+            </div>
+            <div>
+                <input type="submit" class="op" id="10x" name="10x" value="10^x" />
+                <input type="submit" lass="op" id="sqrt" name="sqrt" value="sqrt" />
+                <input type="submit" lass="op" id="log" name="log" value="log">
+                <input type="submit" class="op" id="exp" name="exp" value="exp">
+            </div>
+            <div>
+                <input type="submit" class="red" id="div" name="/" value="/" />
+                <input type="submit" class="red" id="mul" name="*" value="*" />
+                <input type="submit" class="red" id="minus" name="-" value="-" />
+                <input type="submit" class="red" id="add" name="+" value="+" />
+            </div>
+            <div>
+                <input type="submit" class="numb" id="7" name="7" value="7" />
+                <input type="submit" class="numb" id="8" name="8" value="8">
+                <input type="submit" class="numb" id="9" name="9" value="9" />
+                <input type="submit" class="numb" id="4" name="4" value="4" />
+            </div>
+            <div>
+                <input type="submit" class="numb" id="5" name="5" value="5" />
+                <input type="submit" class="numb" id="6" name="6" value="6" />
+                <input type="submit" class="numb" id="1" name="1" value="1" />
+                <input type="submit" class="numb" id="2" name="2" value="2" />
+            </div>
+            <div>
+                <input type="submit" class="numb" id="3" name="3" value="3" />
+                <input type="submit" class="numb" id="0" name="0" value="0" />
+                <input type="submit" class="punto" id="punto" name="punto" value="." />
+                <input type="submit" class="C" id="C" name="C" value="C" />
+            </div>
+            <input type="submit" class="enter" id="enter" name="Enter" value="Enter" />
         </form>
     </main>
 </body>

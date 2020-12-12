@@ -1,0 +1,44 @@
+/*especificidad=10*/
+.news{
+    background-color: rgb(71, 71, 94);
+    color: rgb(248, 248, 248);
+    border-radius: .4em;
+    padding: .2em 1em;
+    margin: .5em 2em;
+}
+/*especificidad=1*/
+h1{
+    text-align:center;
+}
+/*especificidad=1*/
+h2 {
+    text-align: center;
+    color:rgb(55, 55, 71);
+}
+
+/*especificidad=10*/
+.newsHeader{
+    margin-bottom: .3em;
+}
+/*especificidad=10*/
+.newsSubtitle {
+    margin-top: .2em;
+    font-style: italic;
+}
+/*especificidad=10*/
+.thumbnailImg {
+    height: 12.5em;
+    object-fit: contain;
+}
+/*especificidad=1*/
+a {
+    color: rgb(231, 205, 133);
+}
+/*especificidad=11*/
+a:hover {
+    color: rgb(255, 238, 88);
+}
+/*especificidad=22*/
+a:visited a:active {
+    color: rgb(206, 157, 50);
+}

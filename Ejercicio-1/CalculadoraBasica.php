@@ -5,11 +5,13 @@ class CalculadoraBasica
 {
     private $memoria;
     private $pantalla;
+    private $borrar;
 
     public function __construct()
     {
         $this->pantalla = "";
         $this->memoria = "";
+        $this->borrar = false;
     }
 
     public function getPantalla()
@@ -29,6 +31,10 @@ class CalculadoraBasica
 
     public function digit($digit)
     {
+        if ($this->borrar) {
+            $this->borrar = false;
+            $this->cleanPantalla();
+        }
         if ($this->pantalla === 0) {
             $this->pantalla = $digit;
         } else {
@@ -81,6 +87,7 @@ class CalculadoraBasica
         try {
             $this->pantalla = eval("return $this->pantalla;");
             $this->memoria = 0;
+            $this->borrar = true;
         } catch (Exception $e) {
             $_SESSION["expresion"] = "Error: " . $e->getMessage();
         }
@@ -134,10 +141,10 @@ if (count($_POST) > 0) {
 <body>
     <h1>Calculadora básica</h1>
     <main class="calculator" id="calculator">
-        <form method='post' action='#'>
+        <form method='post'>
             <!--<input class="pantalla" id="pantalla" title="Pantalla" readonly disabled/>-->
             <p>
-                <?php echo ("<input type='text' class'pantalla' id='pantalla' value='" . $calc->getPantalla() . "' disabled />");?>
+                <input type='text' class='pantalla' id='pantalla' value="<?php echo $calc->getPantalla() ?>" disabled />
             </p>
             <input type="submit" class="darkGrey" id="mrc" name="mrc" value="mrc"/>
             <input type="submit" class="darkGrey" id="mMenos" name="m-" value="m-" />

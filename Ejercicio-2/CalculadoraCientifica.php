@@ -5,6 +5,7 @@ class CalculadoraBasica
 {
     protected $memoria;
     protected $pantalla;
+    private $borrar;
 
     public function __construct()
     {
@@ -29,6 +30,10 @@ class CalculadoraBasica
 
     public function button($button)
     {
+        if ($this->borrar) {
+            $this->borrar = false;
+            $this->cleanPantalla();
+        }
         if ($this->pantalla === 0) {
             $this->pantalla = $button;
         } else {
@@ -84,10 +89,13 @@ class CalculadoraBasica
         } catch (Exception $e) {
             $_SESSION["expresion"] = "Error: " . $e->getMessage();
         }
+        $this->borrar = true;
     }
 }
 class CalculadoraCientifica extends CalculadoraBasica
+
 {
+    
     public function factorial()
     {
         $this->pantalla = "". $this->_factorial(eval($this->pantalla));
@@ -102,7 +110,7 @@ class CalculadoraCientifica extends CalculadoraBasica
 
     public function functions($op)
     {
-        switch ($this->$op) {
+        switch ($op) {
 
 
             case ("log"):
@@ -153,12 +161,12 @@ class CalculadoraCientifica extends CalculadoraBasica
         }
     }
 }
-if (!isset($_SESSION["calculadora"])) {
-    $_SESSION["calculadora"] = new CalculadoraCientifica();
-    $_SESSION["expresion"] = "";
+if (!isset($_SESSION["calculadoraCient"])) {
+    $_SESSION["calculadoraCient"] = new CalculadoraCientifica();
+   
 }
-$_SESSION["calculadora"] = new CalculadoraCientifica();
-$calc = $_SESSION["calculadora"];
+
+$calc = $_SESSION["calculadoraCient"];
 
 if (count($_POST) > 0) {
     if (isset($_POST["0"])) $calc->button("0");
@@ -199,7 +207,6 @@ if (count($_POST) > 0) {
     if (isset($_POST[")"])) $calc->button(")");
 
 
-    $_SESSION["expresion"] = $calc->getPantalla();
 }
 
 ?>
@@ -217,10 +224,10 @@ if (count($_POST) > 0) {
 <body>
     <h1>Calculadora científica</h1>
     <main class="calculator" id="calculator">
-        <form method='post' action='#'>
+        <form method='post'>
             <!--<input class="pantalla" id="pantalla" title="Pantalla" readonly disabled/>-->
             <p>
-                <?php echo ("<input type='text' class'pantalla' id='pantalla' value='" . $calc->getPantalla() . "' disabled />"); ?>
+                <input type='text' class='pantalla' id='pantalla' value="<?php echo $calc->getPantalla() ?>" disabled />
             </p>
             <input type="submit" class="darkGrey" id="mrc" name="mrc" value="mrc" />
             <input type="submit" class="darkGrey" id="mMenos" name="m-" value="m-" />

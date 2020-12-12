@@ -7,7 +7,7 @@ h1{
     text-align: center;
 }
 /*especificidad=10*/
-.calculadora {
+.calculator {
     font-size: 24px;
     margin: 0 auto;
     height: 26em;
@@ -19,7 +19,7 @@ h1{
 /*especificidad=10*/
 .pantalla {
     border: 0;
-    background-color: rgb(186, 186, 196);
+    background-color: rgb(155, 155, 180);
     text-align: right;
     font-size: 28px;
     width: 15.9em;
@@ -31,29 +31,19 @@ h1{
 input {
     border: 0;
     border-radius: 5px;
-    background: rgb(129, 174, 177);
+    background: rgb(233, 242, 243);
     color: #1d2f36;
     font: inherit;
     margin: 0.25em;
     width: 3em;
     height: 2em;
 }
-/*especificidad=11*/
-input:disabled {
-    background: rgb(100,100,100);
-}
-/*especificidad=11*/
-input:hover {
-    background: rgb(207, 204, 204);
-}
+
 /*especificidad=10*/
 .op {
     background: rgb(226, 221, 221);
 }
-/*especificidad=10*/
-.reg{
-    background: rgb(226, 221, 221);
-}
+
 /*especificidad=10*/
 .numb{
     background: rgb(255, 255, 255);
