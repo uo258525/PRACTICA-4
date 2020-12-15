@@ -35,9 +35,9 @@ if (count($_POST) > 0)
 <html lang="es">
 
 <head>
-    <title>Ejercicio 6</title>
+    <title>Ejercicio 7</title>
     <meta charset="utf-8" />
-    <link href="Ejercicio6.css" rel="stylesheet" />
+    <link href="Ejercicio7.css" rel="stylesheet" />
 
 </head>
 
@@ -47,10 +47,10 @@ if (count($_POST) > 0)
     <div class="content">
 
     <section>
-        <h2>Acciones disponibles</h2>
+        <h2>Acciones disponibles peliculas</h2>
         <form method="post">
             <input type="submit" name="createDb" value="Crear Base de Datos" />
-            <input type="submit" name="createTable" value="Crear Tabla 'PruebasUsabilidad'" />
+            <input type="submit" name="createTable" value="Crear Tabla 'Peliculas'" />
             <input type="submit" name="cargarDatos" value="Cargar Datos" />
             <input type="submit" name="exportarDatos" value="Exportar Datos" />
             <input type="submit" name="generarInforme" value="Generar Informe" />
@@ -60,13 +60,19 @@ if (count($_POST) > 0)
                     en tabla </a></li>
             <li><a href="BuscarDatosTabla.php" title="BuscarDatosTabla">Buscar Datos en
                     tabla </a></li>
-                    <li><a href="ModificarDatosTabla.php" title="ModificarDatosTabla">Modificar datos en
-                    tabla </a></li>
             <li><a href="EliminarDatosTabla.php" title="EliminarDatosTabla">Eliminar datos en
                     tabla </a></li>
             
         </ul>
     </section>
+    <h2>Comandos disponibles actores</h2>
+        <ul>
+            <li><a href="CrearTablaActores.php" title="CrearTablaActores">Crear Tabla Actores</a></li>
+            <li><a href="InsertarDatosActores.php" title="InsertarDatosActores">Insertar Datos
+                    de Actores </a></li>
+            <li><a href="InformeActores.php" title="InformeActores">Informe
+                    de Actores </a></li>
+        </ul>
     </div>
 
 

@@ -142,7 +142,6 @@ if (count($_POST) > 0) {
     <h1>Calculadora básica</h1>
     <main class="calculator" id="calculator">
         <form method='post'>
-            <!--<input class="pantalla" id="pantalla" title="Pantalla" readonly disabled/>-->
             <p>
                 <input type='text' class='pantalla' id='pantalla' value="<?php echo $calc->getPantalla() ?>" disabled />
             </p>

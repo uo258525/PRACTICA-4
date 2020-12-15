@@ -5,7 +5,7 @@ class BaseDatos
 
     public function connect()
     {
-        $servername = "Local";
+        $servername = "127.0.0.1:3306";
         $username = "DBUSER2020";
         $password = "DBPSWD2020";
         $database = "mydb";
@@ -15,13 +15,12 @@ class BaseDatos
         if ($db->connect_error) {
             exit("<p>ERROR de conexión:" . $db->connect_error . "</p>");
         } else {
-            echo "<p>Conexión establecida.</p>";
             return $db;
         }
     }
     public function crearBase()
     {
-        $servername = "Local";
+        $servername = "localhost";
         $username = "DBUSER2020";
         $password = "DBPSWD2020";
         $datab = new mysqli($servername, $username, $password);
@@ -100,7 +99,7 @@ class BaseDatos
     VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)");
 
         $consultaPre->bind_param(
-            'sisiisssi',
+            'issssisiisssi',
             $codigo,
             $nombre,
             $apellidos,
@@ -164,13 +163,13 @@ class BaseDatos
         $db = $this->connect();
 
         //preparo la sentencia de inserción
-        $consultaPre = $db->prepare("UPDATE PruebasUsabilidad SET edad =?, sexo=?,
+        $consultaPre = $db->prepare("UPDATE PruebasUsabilidad SET codigo=?, nombre=?, apellidos=?, email=?, telefono=?, edad =?, sexo=?,
         pericia=?, minutos=?, exito=?, comentarios=?, propuestas=?, valoracion=?
         WHERE codigo = ?");
 
         //añado los parámetros de la variable Predefinida $_POST
         $consultaPre->bind_param(
-            'isiisssis',
+            'issssisiisssi',
             $codigo,
             $nombre,
             $apellidos,
@@ -183,8 +182,7 @@ class BaseDatos
             $exito,
             $comentarios,
             $propuestas,
-            $valoracion,
-            
+            $valoracion
         );
 
         $consultaPre->execute();
@@ -194,7 +192,7 @@ class BaseDatos
         $consultaPre->close();
         $db->close();
     }
-    public function delete($codigo)
+    public function eliminar($codigo)
     {
         $db = $this->connect();
 
@@ -221,39 +219,11 @@ class BaseDatos
         $consultaPre->close();
         $db->close();
     }
-    function generarInforme(){
-
-        $db = $this->connect();
-
-
-        $consultaPre = $db->prepare("SELECT * FROM persona");      
-
-        $consultaPre->execute();
-
-        $resultado = $consultaPre->get_result();
-
-        if ($resultado) {
-            
-            echo "<p>Informe con los siguientes datos: CODIGO  NOMBRE  APELLIDOS</p>";
-
-            while($row = $resultado->fetch_assoc()) {
-
-                echo "<p>CODIGO:" . $row['codigo'] . " Nombre y apellidos: ".$row['nombre'].", ". $row['apellidos'] ."</p>"; 
-            }
- 
-        } else {
-
-            echo "Sin resultados";
-        }
-
-        $consultaPre->close();
-        $db->close();
-
-    }
+   
 
     public function cargarDatos()
         {
-            if (($h = fopen("data.csv", "r")) !== false) {
+            if (($h = fopen("pruebasUsabilidad.csv", "r")) !== false) {
                 while (($data = fgetcsv($h, 1000, ";")) !== false) {
                     $this->insertar($data[0], $data[1],$data[2],$data[3],$data[4],
                     $data[5],$data[6],$data[7],$data[8],$data[9],$data[10], $data[11],$data[12]);
@@ -278,7 +248,7 @@ class BaseDatos
                     $row['minutos'].";" . $row['exito'] .";" . $row['comentarios'] .";" . $row['propuestas'] .
                     ";" . $row['valoracion']."\r\n";
                 }
-                $NombreArchivo = date("d.m.y").time().".csv";
+                $NombreArchivo ="pruebasUsabilidad.csv";
                 file_put_contents($NombreArchivo, $datos);
                 echo "<p>Datos escritos en el fichero ".$NombreArchivo."</p>";
             } else {
@@ -289,12 +259,12 @@ class BaseDatos
             $db->close();
         }
 
-    public function informeMedio()
+    public function generarInforme()
         {
             $db = $this->connect();
 
-            $consultaPre = $db->prepare("SELECT avg(edad) AS edadMedia, avg(pericia) AS periciaMedia,
-            avg(minutos) AS minutosMedia, avg(valoracion) AS valoracionMedia FROM PruebasUsabilidad");
+            $consultaPre = $db->prepare("SELECT avg(edad) AS edadMedia, avg(sexo) AS sexoMedio,  avg(pericia) AS periciaMedia,
+            avg(minutos) AS minutosMedia,avg(exito) AS exitoMedio, avg(valoracion) AS valoracionMedia FROM PruebasUsabilidad");
             $consultaPre->execute();
             $resultado = $consultaPre->get_result();
 
@@ -303,13 +273,15 @@ class BaseDatos
                 echo "<table>
                 <tr>
                     <th>Edad Media</th>
+                    <th>Sexo medio</th>
                     <th>Pericia Media</th>
                     <th>Minutos de media</th>
+                    <th>Exito medio</th>
                     <th>Valoracion media</th>
                 </tr>";
                 while ($row = $resultado->fetch_assoc()) {
-                    echo "<tr> <td>" .$row['edadMedia']." años </td> <td>". $row['periciaMedia']."</td> <td>".
-                    $row['minutosMedia']."</td> <td>" . $row['valoracionMedia'] ."</td> </tr>";
+                    echo "<tr> <td>" .$row['edadMedia']." años </td><td>".$row['exitoMedio']."</td> <td>". $row['periciaMedia']."</td> <td>".
+                    $row['minutosMedia']."</td> <td>".$row['exitoMedio']."</td><td>" . $row['valoracionMedia'] ."</td> </tr>";
                 }
                 echo "</table>";
             } else {
@@ -320,3 +292,5 @@ class BaseDatos
             $db->close();
         }
 }
+$baseDatos = new BaseDatos();
+?>

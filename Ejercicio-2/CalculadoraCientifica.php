@@ -95,17 +95,17 @@ class CalculadoraBasica
 class CalculadoraCientifica extends CalculadoraBasica
 
 {
-    
+
     public function factorial()
     {
-        $this->pantalla = "". $this->_factorial(eval($this->pantalla));
+        $this->pantalla = "" . $this->_factorial(eval($this->pantalla));
     }
-    public function _factorial(float $n) : float
+    public function _factorial(float $n): float
     {
         if ($n == 0)
             return 1;
 
-        return $n * $this->_factorial($n-1);
+        return $n * $this->_factorial($n - 1);
     }
 
     public function functions($op)
@@ -157,13 +157,11 @@ class CalculadoraCientifica extends CalculadoraBasica
                 $resultado = eval("return $this->pantalla;");
                 $this->pantalla = atan($resultado);
                 break;
-            
         }
     }
 }
 if (!isset($_SESSION["calculadoraCient"])) {
     $_SESSION["calculadoraCient"] = new CalculadoraCientifica();
-   
 }
 
 $calc = $_SESSION["calculadoraCient"];
@@ -205,8 +203,6 @@ if (count($_POST) > 0) {
     if (isset($_POST["mod"])) $calc->button("%");
     if (isset($_POST["("])) $calc->button("(");
     if (isset($_POST[")"])) $calc->button(")");
-
-
 }
 
 ?>
@@ -225,30 +221,32 @@ if (count($_POST) > 0) {
     <h1>Calculadora científica</h1>
     <main class="calculator" id="calculator">
         <form method='post'>
-            <!--<input class="pantalla" id="pantalla" title="Pantalla" readonly disabled/>-->
             <p>
                 <input type='text' class='pantalla' id='pantalla' value="<?php echo $calc->getPantalla() ?>" disabled />
             </p>
-            <input type="submit" class="darkGrey" id="mrc" name="mrc" value="mrc" />
-            <input type="submit" class="darkGrey" id="mMenos" name="m-" value="m-" />
-            <input type="submit" class="darkGrey" id="mMas" name="m+" value="m+" />
-            <input type="submit" class="op" id="x2"  name="x2" value="x^2"/>
-
-            <input type="submit" class="op"  id="mrc" name="mrc" value="mrc"/>
-            <input type="submit" class="op"  id="sin" name="sin" value="sin"/>
-            <input type="submit" class="op"  id="cos" name="cos" value="cos"/>
-            <input type="submit" class="op" id="tan" name="tan" value="tan"/>
-
-            <input type="submit" class="op"  id="arcsin" name="arcsin" value="arcsin"/>
-            <input type="submit" class="op"  id="arcos" name="arcos" value="arcos"/>
-            <input type="submit" class="op"  id="arctan" name="arctan" value="arctan"/>
-            <input type="submit" class="op" id="10x" name="10x" value="10^x"/>
-            <input type="submit" class="op" id="fact" name="fact" value="!"/>
+            <div>
+                <input type="submit" class="darkGrey" id="mrc" name="mrc" value="mrc" />
+                <input type="submit" class="darkGrey" id="mMenos" name="m-" value="m-" />
+                <input type="submit" class="darkGrey" id="mMas" name="m+" value="m+" />
+                <input type="submit" class="op" id="x2" name="x2" value="x^2" />
+            </div>
+            <div>
+                <input type="submit" class="op" id="sin" name="sin" value="sin" />
+                <input type="submit" class="op" id="cos" name="cos" value="cos" />
+                <input type="submit" class="op" id="tan" name="tan" value="tan" />
+                <input type="submit" class="op" id="arcsin" name="arcsin" value="arcsin" />
+            </div>
+            <div>
+            <input type="submit" class="op" id="arcos" name="arcos" value="arcos" />
+            <input type="submit" class="op" id="arctan" name="arctan" value="arctan" />
+            <input type="submit" class="op" id="10x" name="10x" value="10^x" />
+            <input type="submit" class="op" id="fact" name="fact" value="!" />
+            </div>
 
             <input type="submit" lass="op" id="sqrt" name="sqrt" value="sqrt" />
             <input type="submit" lass="op" id="log" name="log" value="log">
             <input type="submit" class="op" id="exp" name="exp" value="exp">
-            <input type="submit" class="op" id="mod" name="mod" value="mod"/>
+            <input type="submit" class="op" id="mod" name="mod" value="mod" />
             <input type="submit" class="red" id="div" name="/" value="/" />
             <input type="submit" class="numb" id="7" name="7" value="7" />
             <input type="submit" class="numb" id="8" name="8" value="8">
